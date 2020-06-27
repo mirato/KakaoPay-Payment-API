@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.payment.api.mapper.PaymentMapper">
+
+	<!-- 뿌리기 정보 리스트 조회 -->
+	<select id="selectFlyMoneyInfoList" parameterType="FlyMoneyInfoEntity" resultType="FlyMoneyInfoEntity">
+		SELECT /* sql-payment.xml, selectFlyMoneyInfoList */
+			  A.FLY_MONEY_SEQ
+			, A.USER_ID
+			, A.ROOM_ID
+			, A.TOKEN
+			, A.STATUS       
+			, A.FLY_MONEY    
+			, A.LIMIT_CNT    
+			, A.LEFT_MONEY   
+			, A.LEFT_CNT   
+			, A.INS_USER     
+			, A.INS_DATE     
+			, A.UPT_USER     
+			, A.UPT_DATE
+		 FROM TBL_FLY_MONEY A
+        <where>
+            <trim prefixOverrides="AND|OR">
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(flyMoneySeq)">
+                    AND A.FLY_MONEY_SEQ = #{flyMoneySeq}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(userId)">
+                    AND A.USER_ID = #{userId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(roomId)">
+                    AND A.ROOM_ID = #{roomId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(token)">
+                    AND A.TOKEN = #{token}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(status)">
+                    AND A.STATUS = #{status}
+                </if>
+            </trim>
+        </where>
+	</select>
+
+	<!-- 뿌리기 정보 조회 -->
+	<select id="selectFlyMoneyInfo" parameterType="FlyMoneyInfoEntity" resultType="FlyMoneyInfoEntity">
+		SELECT /* sql-payment.xml, selectFlyMoneyInfo */
+			  A.FLY_MONEY_SEQ
+			, A.USER_ID
+			, A.ROOM_ID
+			, A.TOKEN
+			, A.STATUS       
+			, A.FLY_MONEY    
+			, A.LIMIT_CNT    
+			, A.LEFT_MONEY   
+			, A.LEFT_CNT   
+			, A.INS_USER     
+			, A.INS_DATE     
+			, A.UPT_USER     
+			, A.UPT_DATE
+		 FROM TBL_FLY_MONEY A
+        <where>
+            <trim prefixOverrides="AND|OR">
+	        	<if test="limitDay != null and limitDay != ''">
+					AND A.INS_DATE BETWEEN INS_DATE AND DATE_ADD(INS_DATE,INTERVAL #{limitDay} DAY)
+				</if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(flyMoneySeq)">
+                    AND A.FLY_MONEY_SEQ = #{flyMoneySeq}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(userId)">
+                    AND A.USER_ID = #{userId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(roomId)">
+                    AND A.ROOM_ID = #{roomId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(token)">
+                    AND A.TOKEN = #{token}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(status)">
+                    AND A.STATUS = #{status}
+                </if>
+            </trim>
+        </where>
+	</select>
+
+	<!-- 뿌리기 이력 조회 -->
+	<select id="selectFlyMoneyHistList" parameterType="FlyMoneyHistEntity" resultType="FlyMoneyHistEntity">
+		SELECT /* sql-payment.xml, selectFlyMoneyHistList */
+			  A.FLY_MONEY_HIST_SEQ
+			, A.FLY_MONEY_SEQ
+			, A.USER_ID      
+			, A.ROOM_ID      
+			, A.TOKEN        
+			, A.CATCH_USER_ID       
+			, A.CATCH_MONEY    
+			, A.INS_USER     
+			, A.INS_DATE     
+			, A.UPT_USER     
+			, A.UPT_DATE
+		 FROM TBL_FLY_MONEY_HIST A
+        <where>
+            <trim prefixOverrides="AND|OR">
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(flyMoneyHistSeq)">
+                    AND A.FLY_MONEY_HIST_SEQ = #{flyMoneyHistSeq}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(flyMoneySeq)">
+                    AND A.FLY_MONEY_SEQ = #{flyMoneySeq}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(userId)">
+                    AND A.USER_ID = #{userId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(roomId)">
+                    AND A.ROOM_ID = #{roomId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(token)">
+                    AND A.TOKEN = #{token}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(catchUserId)">
+                    AND A.CATCH_USER_ID = #{catchUserId}
+                </if>
+            </trim>
+        </where>
+	</select>
+
+	<!-- 토큰 정보 조회 -->
+	<select id="selectTokenInfo" parameterType="TokenMstEntity" resultType="TokenMstEntity">
+		SELECT /* sql-payment.xml, selectTokenInfo */
+			  A.TOKEN        
+			, A.USER_ID      
+			, A.PUB_TIME     
+			, A.EXP_TIME     
+		 FROM TBL_TOKEN_MST A
+        <where>
+            <trim prefixOverrides="AND|OR">
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(token)">
+                    AND A.TOKEN = #{token}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(userId)">
+                    AND A.USER_ID = #{userId}
+                </if>
+            </trim>
+        </where>
+	</select>
+	
+	<!-- 뿌리기 등록 -->
+	<insert id="insertFlyMoney" parameterType="FlyMoneyInfoEntity" useGeneratedKeys="true" keyProperty="flyMoneySeq">
+		INSERT INTO TBL_FLY_MONEY /* sql-payment.xml, insertFlyMoney */
+		(
+			  USER_ID      
+			, ROOM_ID      
+			, TOKEN        
+			, STATUS       
+			, FLY_MONEY    
+			, LIMIT_CNT    
+			, LEFT_MONEY   
+			, LEFT_CNT   
+			, INS_USER     
+			, INS_DATE     
+		) VALUES (
+			  #{userId}
+			, #{roomId}
+			, #{token}
+			, #{status}
+			, #{flyMoney}
+			, #{limitCnt}
+			, #{leftMoney}
+			, #{leftCnt}
+			, #{userId}
+			, NOW(6)
+		)
+	</insert>
+	
+	<!-- 뿌리기 이력 등록 -->
+	<insert id="insertFlyMoneyHist" parameterType="FlyMoneyHistEntity" useGeneratedKeys="true" keyProperty="flyMoneyHistSeq">
+		INSERT INTO TBL_FLY_MONEY_HIST /* sql-payment.xml, insertFlyMoneyHist */
+		(
+			  FLY_MONEY_SEQ
+			, USER_ID      
+			, ROOM_ID      
+			, TOKEN        
+			, CATCH_USER_ID       
+			, CATCH_MONEY    
+			, INS_USER     
+			, INS_DATE     
+		) VALUES (
+			  #{flyMoneySeq}
+			, #{userId}
+			, #{roomId}
+			, #{token}
+			, #{catchUserId}
+			, #{catchMoney}
+			, #{catchUserId}
+			, NOW(6)
+		)
+	</insert>
+	
+	<!-- 토큰 발급 -->
+	<insert id="insertTokenMst" parameterType="TokenMstEntity">
+		INSERT INTO TBL_TOKEN_MST	/* sql-payment.xml, insertTokenMst */
+		(
+			  TOKEN        
+			, USER_ID      
+			, PUB_TIME     
+			, EXP_TIME    
+		) VALUES (
+			  #{token}
+			, #{userId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, DATE_FORMAT(DATE_ADD(NOW(),INTERVAL #{diffTime} MINUTE), '%Y%m%d%H%i%s')
+		)
+	</insert>
+
+	<!-- 뿌리기 업데이트 -->
+	<update id="updateFlyMoneyInfo" parameterType="FlyMoneyInfoEntity">
+		UPDATE TBL_FLY_MONEY		/* sql-payment.xml, updateFlyMoneyInfo */
+		   SET 
+	   		  UPT_DATE = NOW(6)
+	   	    , UPT_USER = #{userId}
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(status)">
+			, STATUS = #{status}
+			</if>
+			<if test="leftMoney != null and leftMoney != ''">
+			, LEFT_MONEY = #{leftMoney}
+			</if>
+			<if test="leftCnt != null and leftCnt != ''">
+			, LEFT_CNT = #{leftCnt}
+			</if>
+        <where>
+            <trim prefixOverrides="AND|OR">
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(flyMoneySeq)">
+                    AND FLY_MONEY_SEQ = #{flyMoneySeq}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(userId)">
+                    AND USER_ID = #{userId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(roomId)">
+                    AND ROOM_ID = #{roomId}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(token)">
+                    AND TOKEN = #{token}
+                </if>
+            </trim>
+        </where>
+	</update>
+
+</mapper>

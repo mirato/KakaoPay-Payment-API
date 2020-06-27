@@ -1,0 +1,79 @@
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    mode: HTML
+    prefix: classpath:templates/
+    suffix: .html
+    encoding: UTF-8
+  mvc:
+    contentnegotiation:
+      favor-parameter: true
+      favor-path-extension: true
+
+server:
+  tomcat:
+    protocol-header: x-forwarded-proto
+    remote-ip-header: x-forwarded-for 
+    
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    
+logging:
+  config: classpath:logback.xml
+  level:
+    root: warn
+    com.at.stockplus.*: debug
+
+---
+spring:
+  profiles: local
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/kakaopay?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnection=true
+      username: root
+      password: 1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connection-test-query: SELECT 1
+
+server:
+  port: 9999
+  https: false
+
+---
+spring:
+  profiles: dev
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/kakaopay?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnection=true
+      username: root
+      password: 1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connection-test-query: SELECT 1
+      
+server:
+  port: 9999
+  https: true
+    
+---
+spring:
+  profiles: prod
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/kakaopay?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnection=true
+      username: root
+      password: 1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connection-test-query: SELECT 1
+      
+server:
+  port: 9999
+  https: true
+    
+logging:
+  level:
+    root: info
+    com.at.stockplus.*: debug
